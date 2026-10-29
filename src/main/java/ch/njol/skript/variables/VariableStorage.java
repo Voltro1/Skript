@@ -1,26 +1,26 @@
 package ch.njol.skript.variables;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.util.Set;
-import ch.njol.skript.util.Timespan;
-import ch.njol.skript.util.Timespan.TimePeriod;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import com.google.errorprone.annotations.ThreadSafe;
-import org.jetbrains.annotations.Blocking;
-import org.jetbrains.annotations.Nullable;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.log.ParseLogHandler;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.util.Timespan;
+import ch.njol.skript.util.Timespan.TimePeriod;
+import com.google.errorprone.annotations.ThreadSafe;
+import org.jetbrains.annotations.Blocking;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.skriptlang.skript.addon.SkriptAddon;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * A variable storage is holds the means and methods of storing variables.
@@ -72,7 +72,7 @@ public abstract class VariableStorage implements Closeable {
 		saveTaskPeriod = defaults[1];
 		backupIntervalMillis = defaults[2];
 		try {
-			requiredChangesForResave = Integer.parseInt(node.get("required changes per save", String.valueOf(FlatFileStorage.defaultRequiredChangesForResave)));
+			requiredChangesForResave = Integer.parseInt(node.get("required changes per save", String.valueOf(1_000)));
 			backupsToKeep = Integer.parseInt(node.get("backups to keep", "-1"));
 			if (requiredChangesForResave < 1 || backupsToKeep < -1)
 				throw new NumberFormatException();

@@ -7,6 +7,7 @@ import ch.njol.skript.config.SectionNode;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.skriptlang.skript.variables.CsvFormat;
 import org.skriptlang.skript.variables.storage.H2Storage;
 import org.skriptlang.skript.variables.storage.SQLiteStorage;
 
@@ -252,7 +253,7 @@ public class JdbcStorageTest {
 				try (var gzip = new java.util.zip.GZIPInputStream(java.nio.file.Files.newInputStream(backup))) {
 					String csv = new String(gzip.readAllBytes(), StandardCharsets.UTF_8);
 					assertTrue(csv.contains("unloaded"));
-					assertTrue(csv.contains(FlatFileStorage.encode(
+					assertTrue(csv.contains(CsvFormat.encode(
 						ch.njol.skript.registrations.Classes.serialize("preserved").data())));
 				}
 				assertEquals(0, reopened.loadedVariables());

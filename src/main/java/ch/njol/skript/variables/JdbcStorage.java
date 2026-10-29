@@ -11,6 +11,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.addon.SkriptAddon;
+import org.skriptlang.skript.variables.CsvFormat;
+import org.skriptlang.skript.variables.storage.flatfile.FlatFileStorage;
 
 import java.sql.*;
 import java.util.HashSet;
@@ -792,13 +794,13 @@ public abstract class JdbcStorage extends VariableStorage {
 		try (Connection conn = database.getConnection(); Statement stmt = conn.createStatement();
 			 ResultSet rows = stmt.executeQuery("SELECT `name`, `type`, `value` FROM " + table);
 			 var output = backupOutput(target);
-			 java.io.PrintWriter writer = new java.io.PrintWriter(output, false, FlatFileStorage.FILE_CHARSET)) {
+			 java.io.PrintWriter writer = new java.io.PrintWriter(output, false, CsvFormat.CHARSET)) {
 			writer.println("# version: " + Skript.getVersion());
 			while (rows.next()) {
 				String type = rows.getString("type");
 				byte[] data = rows.getBytes("value");
 				if (type != null && data != null)
-					FlatFileStorage.writeCSV(writer, rows.getString("name"), type, FlatFileStorage.encode(data));
+					CsvFormat.writeCSV(writer, rows.getString("name"), type, CsvFormat.encode(data));
 			}
 			if (writer.checkError())
 				throw new java.io.IOException("Cannot write database backup");
